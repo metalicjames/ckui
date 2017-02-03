@@ -47,6 +47,10 @@ $(document).on("click", ".unspent_output", function() {
     refresh();
 });
 
+$(document).on("click", "#new_output_button", function() {    
+    $("#new_output_form").toggle();
+});
+
 $(document).on("click", "#nav_address", function() {    
     $("#transaction_pane").hide();
     $("#address_pane").show();

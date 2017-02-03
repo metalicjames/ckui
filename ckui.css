@@ -52,6 +52,10 @@ table td div {
     vertical-align: top;
 }
 
-#transaction_pane {
+#transaction_pane, #new_output_form {
     display: none;
+}
+
+#pending_inputs_div h4 {
+    display: inline-block;
 }

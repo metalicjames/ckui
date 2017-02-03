@@ -54,11 +54,33 @@ $(document).on("click", "#new_output_button", function() {
 $(document).on("click", "#nav_address", function() {    
     $("#transaction_pane").hide();
     $("#address_pane").show();
+    $("#compiler_pane").hide();
 });
 
 $(document).on("click", "#nav_transaction", function() {    
     $("#transaction_pane").show();
     $("#address_pane").hide();
+    $("#compiler_pane").hide();
+});
+
+$(document).on("click", "#nav_compiler", function() {    
+    $("#transaction_pane").hide();
+    $("#address_pane").hide();
+    $("#compiler_pane").show();
+});
+
+$(document).on("click", "#compile_button", function(event) {
+    event.preventDefault();
+    var contract = $(this).siblings("textarea").val();
+    $.jsonRPC.request('compilecontract', {
+          params: {"code": contract},
+          success: function(result) {
+            $("#compiler_result").text(result["result"]);
+          },
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+    });
 });
 
 $(document).ready(function() {

@@ -52,10 +52,18 @@ table td div {
     vertical-align: top;
 }
 
-#transaction_pane, #new_output_form {
+#transaction_pane, #new_output_form, #compiler_pane {
     display: none;
 }
 
 #pending_inputs_div h4 {
     display: inline-block;
 }
+
+#compiler_result {
+    max-width: 40em;
+    max-height: 20em;
+    overflow: scroll;
+    word-wrap: break-word;
+}
+

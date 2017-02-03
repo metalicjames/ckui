@@ -16,6 +16,7 @@
                 <p>
                     <button type="button" id="nav_address">Addresses</button>
                     <button type="button" id="nav_transaction">Transaction Designer</button>
+                    <button type="button" id="nav_compiler">Contract Compiler</button>
                 </p>            
             </div>
         </div>
@@ -77,6 +78,21 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div id="compiler_pane">
+            <h3>Contract Compiler</h3>
+            <form id="compiler_form">
+	            <fieldset>							            
+                    <legend>Compile Contract</legend>
+	                Contract:<br>
+	                <textarea name="contract" rows="25" cols="80"></textarea><br>
+                    <button type="button" id="compile_button">Compile</button>
+                    <h4>Bytecode</h4>                    
+                    <p id="compiler_result">
+
+                    </p>
+	            </fieldset>
+            </form>
         </div>
     </body>
 </html>

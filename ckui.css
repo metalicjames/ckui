@@ -1,0 +1,41 @@
+table {
+    border-collapse: collapse; 
+    table-layout: fixed;
+    width: 100%;
+}
+
+table td {
+    border: solid 1px black; 
+    padding: 0.5em; 
+    word-wrap: break-word;
+}
+
+table td div {
+    height: 6em;
+    overflow: hidden;
+}
+
+.table_container {
+    height: 65vh;
+    overflow: scroll;
+    padding: 1em;
+    width: 100%;
+    border: solid 2px black; 
+}
+
+#left_pane {
+    float: left;
+    width: 30%;
+}
+
+#right_pane {
+    display: inline-block;
+    width: 60%;
+    margin-left: 5em;
+}
+
+#pending_outputs_div, #pending_inputs_div {
+    display: inline-block;   
+    width: 42%;
+    margin-left: -4px;
+}

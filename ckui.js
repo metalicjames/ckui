@@ -26,8 +26,7 @@ function populateOutputTable(accounts) {
     }
 }
 
-$(document).on("click", ".unspent_output", function() {
-    debugger;    
+$(document).on("click", ".unspent_output", function() {    
     if($(this).parent().attr("id") == "pending_outputs_table") {
         $("#outputs_list_table").append($(this));
     } else if($(this).parent().parent().attr("id") == "outputs_list_table") {

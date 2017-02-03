@@ -2,6 +2,7 @@ function refresh() {
     $("#address_table").trigger("update");
     $("#outputs_list_table").trigger("update");
     $("#pending_outputs_table").trigger("update");
+    $("#pending_inputs_table").trigger("update");
 }
 
 function populateOutputTable(accounts) {
@@ -83,6 +84,45 @@ $(document).on("click", "#compile_button", function(event) {
     });
 });
 
+$(document).on("click", "#new_output_add", function(event) {
+    event.preventDefault();
+    
+    var output = {};
+    
+    output["id"] = "";
+    output["value"] = $("#new_output_value").val() * 10000000;
+    output["data"] = {};
+    output["data"]["contract"] = $("#new_output_contract").val();
+    output["publicKey"] = $("#new_output_address").val();
+    
+    //Calculate output id
+    $.jsonRPC.request('calculateoutputid', {
+          params: {"output": output},
+          success: function(result) {
+            //Add new output to table
+            var output = {};
+            output["id"] = result["result"];
+            output["value"] = $("#new_output_value").val();
+            output["data"] = {};
+            output["data"]["contract"] = $("#new_output_contract").val();
+            output["publicKey"] = $("#new_output_address").val();
+            $("#pending_inputs_table").children("tbody").append("<tr class=\"pending_input\"><td><div>"  + output["id"] + 
+                                                                "</div></td><td><div>" + output["publicKey"] + 
+                                                                "</div></td><td><div>" + output["value"] + 
+                                                                "</div></td><td><div>" + output["data"]["contract"] + "</div></td></tr>");
+            refresh();
+          },
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+    });
+});
+
+$(document).on("click", ".pending_input", function(event) {
+    $(this).remove();
+    refresh();
+});
+
 $(document).ready(function() {
 
 $.jsonRPC.setup({
@@ -94,7 +134,7 @@ $.jsonRPC.request('getinfo', {
   params: {},
   success: function(result) {
     $("#server_info").html("<p>CK Version: " + result["result"]["CK Version"] 
-			  + "<br>RPC Version: " + result["result"]["RPC Version"] 
+			              + "<br>RPC Version: " + result["result"]["RPC Version"] 
                           + "<br>Height: " + result["result"]["height"] 
                           + "<br>Balance: " + result["result"]["balance"] 
                           + "<br>Connections: " + result["result"]["connections"] + "</p>");
@@ -118,5 +158,6 @@ $.jsonRPC.request('listaccounts', {
 $("#address_table").tablesorter(); 
 $("#pending_outputs_table").tablesorter();
 $("#outputs_list_table").tablesorter();
+$("#pending_inputs_table").tablesorter();
 
 });

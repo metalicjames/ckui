@@ -53,15 +53,20 @@
 				            <fieldset>					
 					            <legend>New Output</legend>
 					            Address:<br>
-	              					<input type="text" name="address"><br>
+	              					<input type="text" id="new_output_address"><br>
 	              				Value:<br>
-	              					<input type="number" name="value" min="0" step="0.00000001"><br>
+	              					<input type="number" id="new_output_value" min="0" step="0.00000001"><br>
 					            Contract:<br>
-						            <textarea name="contract" rows="4" cols="20"></textarea><br>
-                                    <input type="submit" value="Add" name="submit">
+						            <textarea id="new_output_contract" rows="4" cols="20"></textarea><br>
+                                    <button type="button" id="new_output_add">Add</button>
 				            </fieldset>
 			            </form>
                         <table id="pending_inputs_table">
+                            <thead>
+                                <tr><th>id</th><th>address</th><th>value</th><th>contract</th></tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>

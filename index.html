@@ -3,34 +3,66 @@
         <title>CKUI</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.rawgit.com/datagraph/jquery-jsonrpc/5db1e62087665f5ee6a496fc30839cd69de1db63/jquery.jsonrpc.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/christianbach/tablesorter/774576308e8a25aa9d68b7fe3069b79543992d7a/jquery.tablesorter.min.js"></script>
         <script src="ckui.js"></script>
         <link rel="stylesheet" type="text/css" href="ckui.css">
     </head>
     <body>
-        <div id="server_info">
+        <div id="top_bar">
+            <div id="server_info">
 
-        </div>
-        <div id="left_pane">
-            <h3>Unspent Outputs</h3>
-            <div id="outputs_list_div" class="table_container">
-                <table id="outputs_list_table">
-                    <tr><th>id</th><th>address</th><th>value</th><th>contract</th></tr>
-                </table>
+            </div>
+            <div id="navigation">
+                <p>
+                    <button type="button" id="nav_address">Addresses</button>
+                    <button type="button" id="nav_transaction">Transaction Designer</button>
+                </p>            
             </div>
         </div>
-        <div id="right_pane">
-            <h3>Transaction Designer</h3>
-            <div id="transaction_design_div">
-                <div id="pending_outputs_div" class="table_container">
-                    <h4>Inputs</h4>
-                    <table id="pending_outputs_table">
+        <div id="transaction_pane">     
+            <div id="left_pane">
+                <h3>Unspent Outputs</h3>
+                <div id="outputs_list_div" class="table_container">
+                    <table id="outputs_list_table">
+                        <thead>
+                            <tr><th>id</th><th>address</th><th>value</th><th>contract</th></tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
                     </table>
                 </div>
-                <div id="pending_inputs_div" class="table_container">
-                    <h4>Outputs</h4>
-                    <table id="pending_inputs_table">
-                    </table>
+            </div>
+            <div id="right_pane">
+                <h3>Transaction Designer</h3>
+                <div id="transaction_design_div">
+                    <div id="pending_outputs_div" class="table_container">
+                        <h4>Inputs</h4>
+                        <table id="pending_outputs_table">
+                            <thead>
+                                <tr><th>id</th><th>address</th><th>value</th><th>contract</th></tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="pending_inputs_div" class="table_container">
+                        <h4>Outputs</h4>
+                        <table id="pending_inputs_table">
+                        </table>
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div id="address_pane">
+            <h3>Addresses</h3>
+            <div id="address_div">
+                <table id="address_table">
+                    <thead>
+                        <tr><th>Balance</th><th>Name</th><th>Address</th></tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>

@@ -17,10 +17,17 @@ table td div {
 
 .table_container {
     height: 65vh;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     padding: 1em;
     width: 100%;
     border: solid 2px black; 
+}
+
+#address_div {
+    height: 70vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #left_pane {
@@ -38,4 +45,13 @@ table td div {
     display: inline-block;   
     width: 42%;
     margin-left: -4px;
+}
+
+#navigation, #server_info {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#transaction_pane {
+    display: none;
 }

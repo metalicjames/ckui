@@ -67,3 +67,15 @@ table td div {
     word-wrap: break-word;
 }
 
+h3 {
+    display: inline-block;
+}
+
+#tx_preview_pane {
+    display: none;
+}
+
+#tx_preview_pane p {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}

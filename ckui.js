@@ -2,14 +2,7 @@ function getTransaction() {
     var inputs = $('#pending_outputs_table tbody').children("tr").map(function(i, v) {
         var $td = $('div', this);
         var returning = {
-             id: $td.eq(0).text(),
-             publicKey: $td.eq(1).text(),
-             value: parseInt($td.eq(2).text() * 100000000),
-             nonce: parseInt($td.eq(3).text()),            
-        }
-        
-        if($td.eq(4).text() != "") {
-            returning["data"] = {contract: $td.eq(4).text()};
+             outputId: $td.eq(0).text()     
         }
         
         return returning;
@@ -18,14 +11,13 @@ function getTransaction() {
     var outputs = $('#pending_inputs_table tbody').children("tr").map(function(i, v) {
         var $td = $('div', this);
         var returning = {
-             id: $td.eq(0).text(),
-             publicKey: $td.eq(1).text(),
              value: parseInt($td.eq(2).text() * 100000000),
-             nonce: parseInt($td.eq(3).text()),            
+             nonce: parseInt($td.eq(3).text()),
+             data: {publicKey: $td.eq(1).text()}   
         }
         
         if($td.eq(4).text() != "") {
-            returning["data"] = {contract: $td.eq(4).text()};
+            returning["data"]["contract"] = $td.eq(4).text();
         }
         
         return returning;
@@ -38,7 +30,6 @@ function getTransaction() {
 
 $(document).on("click", "#send_transaction_button", function() {  
     var tx = JSON.parse($("#tx_preview_pane p").text());
-    debugger;
     $.jsonRPC.request('sendrawtransaction', {
           params: {"transaction": tx},
           success: function(result) {
@@ -85,13 +76,17 @@ function populateOutputTable(accounts) {
                     for(var j = 0; j < result["result"]["outputs"].length; j++) {
                         var output = result["result"]["outputs"][j];
                         var contract = "";
+                        var publicKey = "";
                         if(output["data"] != null) {
                             if(typeof output["data"]["contract"] != 'undefined') {
                                 contract = output["data"]["contract"];
                             }
+                            if(typeof output["data"]["publicKey"] != 'undefined') {
+                                publicKey = output["data"]["publicKey"];
+                            }
                         }
                         $("#outputs_list_table").children("tbody").append("<tr class=\"unspent_output\"><td><div>" + output["id"] + "</div></td><td><div>" 
-                                                                   + output["publicKey"] + "</div></td><td><div>"
+                                                                   + publicKey + "</div></td><td><div>"
                                                                    + (output["value"] / 100000000.0) + "</div></td><td><div>"
                                                                    + output["nonce"] + "</div></td><td><div>"
                                                                    + contract + "</div></td></tr>");
@@ -110,8 +105,13 @@ function populateOutputTable(accounts) {
 $(document).on("click", ".unspent_output", function() {    
     if($(this).parent().parent().attr("id") == "pending_outputs_table") {
         $("#outputs_list_table").children("tbody").append($(this));
+        $("#total").text((parseFloat($("#total").text()) - parseFloat($(this).children("td").children("div").eq(2).text())).toFixed(8));
+        if($("#pending_outputs_table").children("tbody").children().length == 0) {
+            $("#total").text("0");
+        }
     } else if($(this).parent().parent().attr("id") == "outputs_list_table") {
         $("#pending_outputs_table").children("tbody").append($(this));
+        $("#total").text((parseFloat($("#total").text()) + parseFloat($(this).children("td").children("div").eq(2).text())).toFixed(8));
     }
     
     refresh();
@@ -160,11 +160,11 @@ $(document).on("click", "#new_output_add", function(event) {
     
     output["id"] = "";
     output["value"] = $("#new_output_value").val() * 100000000;
+    output["data"] = {};
     if($("#new_output_contract").val() != "") {
-        output["data"] = {};
         output["data"]["contract"] = $("#new_output_contract").val();
     }
-    output["publicKey"] = $("#new_output_address").val();
+    output["data"]["publicKey"] = $("#new_output_address").val();
     output["nonce"] = Math.floor((Math.random() * 100000000) + 1);
     $("#new_output_nonce").val(output["nonce"]);
     
@@ -179,9 +179,9 @@ $(document).on("click", "#new_output_add", function(event) {
             output["nonce"] = $("#new_output_nonce").val();
             output["data"] = {};
             output["data"]["contract"] = $("#new_output_contract").val();
-            output["publicKey"] = $("#new_output_address").val();
+            output["data"]["publicKey"] = $("#new_output_address").val();
             $("#pending_inputs_table").children("tbody").append("<tr class=\"pending_input\"><td><div>"  + output["id"] + 
-                                                                "</div></td><td><div>" + output["publicKey"] + 
+                                                                "</div></td><td><div>" + output["data"]["publicKey"] + 
                                                                 "</div></td><td><div>" + output["value"] + 
                                                                 "</div></td><td><div>" + output["nonce"] + 
                                                                 "</div></td><td><div>" + output["data"]["contract"] + "</div></td></tr>");

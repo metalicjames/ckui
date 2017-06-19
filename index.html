@@ -15,10 +15,22 @@
             <div id="navigation">
                 <p>
                     <button type="button" id="nav_address">Addresses</button>
+                    <button type="button" id="nav_send">Send</button>
                     <button type="button" id="nav_transaction">Transaction Designer</button>
                     <button type="button" id="nav_compiler">Contract Compiler</button>
                 </p>            
             </div>
+        </div>
+        <div id="send_pane">
+            <h3>Send To Address</h3>
+            <form id="send_form">
+	            <fieldset>					
+		            <legend>Send</legend>
+      					Address: <input type="text" id="send_address"><br>
+      					Amount: <input type="number" id="send_amount" min="0" step="0.00000001"><br>
+                        <button type="button" id="send_button">Send</button>
+	            </fieldset>
+			</form>
         </div>
         <div id="transaction_pane">     
             <div id="left_pane">

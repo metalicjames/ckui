@@ -129,18 +129,28 @@ $(document).on("click", "#nav_address", function() {
     $("#transaction_pane").hide();
     $("#address_pane").show();
     $("#compiler_pane").hide();
+    $("#send_pane").hide();
 });
 
 $(document).on("click", "#nav_transaction", function() {    
     $("#transaction_pane").show();
     $("#address_pane").hide();
     $("#compiler_pane").hide();
+    $("#send_pane").hide();
 });
 
 $(document).on("click", "#nav_compiler", function() {    
     $("#transaction_pane").hide();
     $("#address_pane").hide();
+    $("#send_pane").hide();
     $("#compiler_pane").show();
+});
+
+$(document).on("click", "#nav_send", function() {    
+    $("#transaction_pane").hide();
+    $("#address_pane").hide();
+    $("#compiler_pane").hide();
+    $("#send_pane").show();
 });
 
 $(document).on("click", "#compile_button", function(event) {
@@ -208,6 +218,22 @@ $(document).on("click", "#new_address_add", function(event) {
             var account = result["result"];
             $("#address_table").children("tbody").prepend("<tr><td>" + account["balance"] + "</td><td>" + account["name"] + "</td><td>" + account["address"] + "</td><tr>");
             $("#new_address_name").val("");
+          },
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+    });
+});
+
+$(document).on("click", "#send_button", function(event) {
+    event.preventDefault();
+    
+    $.jsonRPC.request('sendtoaddress', {
+          params: {"address": $("#send_address").val(),
+                   "amount": $("#send_amount").val() * 1.0},
+          success: function(result) {
+              alert(result["result"]);
+              window.location.reload();
           },
           error: function(result) {
               throw new Error(result["error"]["message"]);    

@@ -79,3 +79,7 @@ h3 {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
+
+#new_address_form {
+    display: none;
+}

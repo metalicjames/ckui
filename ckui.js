@@ -121,6 +121,10 @@ $(document).on("click", "#new_output_button", function() {
     $("#new_output_form").toggle();
 });
 
+$(document).on("click", "#new_address_button", function() {    
+    $("#new_address_form").toggle();
+});
+
 $(document).on("click", "#nav_address", function() {    
     $("#transaction_pane").hide();
     $("#address_pane").show();
@@ -186,6 +190,24 @@ $(document).on("click", "#new_output_add", function(event) {
                                                                 "</div></td><td><div>" + output["nonce"] + 
                                                                 "</div></td><td><div>" + output["data"]["contract"] + "</div></td></tr>");
             refresh();
+            
+            $("#new_output_form").trigger('reset');
+          },
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+    });
+});
+
+$(document).on("click", "#new_address_add", function(event) {
+    event.preventDefault();
+    
+    $.jsonRPC.request('account', {
+          params: {"account": $("#new_address_name").val()},
+          success: function(result) {
+            var account = result["result"];
+            $("#address_table").children("tbody").prepend("<tr><td>" + account["balance"] + "</td><td>" + account["name"] + "</td><td>" + account["address"] + "</td><tr>");
+            $("#new_address_name").val("");
           },
           error: function(result) {
               throw new Error(result["error"]["message"]);    
@@ -197,6 +219,19 @@ $(document).on("click", ".pending_input", function(event) {
     $(this).remove();
     refresh();
 });
+
+function refreshAccountsTable() {
+    $.jsonRPC.request('listaccounts', {
+      params: {},
+      success: function(result) {
+        var accounts = result["result"]["accounts"];
+        populateOutputTable(accounts);
+      },
+      error: function(result) {
+          throw new Error(result["error"]["message"]);    
+      }
+    });
+}
 
 $(document).ready(function() {
 
@@ -219,16 +254,7 @@ $.jsonRPC.request('getinfo', {
   }
 });
 
-$.jsonRPC.request('listaccounts', {
-  params: {},
-  success: function(result) {
-    var accounts = result["result"]["accounts"];
-    populateOutputTable(accounts);
-  },
-  error: function(result) {
-      throw new Error(result["error"]["message"]);    
-  }
-});
+refreshAccountsTable();
 
 $("#address_table").tablesorter(); 
 $("#pending_outputs_table").tablesorter();

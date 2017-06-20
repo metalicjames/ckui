@@ -253,11 +253,9 @@ $(document).on("click", "#send_button", function(event) {
     });
 });
 
-$(document).on("click", "#explorer_search_button", function(event) {
-    event.preventDefault();
-    
+function getBlock(id) {
     $.jsonRPC.request('getblock', {
-          params: {"id": $("#explorer_search_string").val()},
+          params: {"id": id},
           success: function(result) {
             $("#block_show_div p").text(JSON.stringify(result["result"], null, 4));
             $("#explorer_search_string").val("");
@@ -268,7 +266,18 @@ $(document).on("click", "#explorer_search_button", function(event) {
               throw new Error(result["error"]["message"]);    
           }
     });
+}
+
+$(document).on("click", "#explorer_search_button", function(event) {
+    event.preventDefault();
+    
+    getBlock($("#explorer_search_string").val());
 });
+
+$(document).on("click", ".block_id", function(event) {
+    getBlock($(this).text());
+});
+
 
 $(document).on("click", ".pending_input", function(event) {
     $(this).remove();
@@ -308,7 +317,7 @@ function loadBlockExplorer() {
                     }
                 }
             }
-            $("#block_list_table").children("tbody").append("<tr><td>" + height + "</td><td>" + result["result"]["id"] + "</td><td>" + (total / 100000000.0) + "</td></tr>");
+            $("#block_list_table").children("tbody").append("<tr><td>" + height + "</td><td class=\"block_id\">" + result["result"]["id"] + "</td><td>" + (total / 100000000.0) + "</td></tr>");
         };
     };
 

@@ -253,9 +253,31 @@ $(document).on("click", "#send_button", function(event) {
     });
 });
 
+$(document).on("click", "#explorer_search_button", function(event) {
+    event.preventDefault();
+    
+    $.jsonRPC.request('getblock', {
+          params: {"id": $("#explorer_search_string").val()},
+          success: function(result) {
+            $("#block_show_div p").text(JSON.stringify(result["result"], null, 4));
+            $("#explorer_search_string").val("");
+            $("#block_show_div").show();
+            $("#block_list_div").hide();
+          },
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+    });
+});
+
 $(document).on("click", ".pending_input", function(event) {
     $(this).remove();
     refresh();
+});
+
+$(document).on("click", "#block_show_back", function(event) {
+    $("#block_show_div").hide();
+    $("#block_list_div").show();
 });
 
 function refreshAccountsTable() {

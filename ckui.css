@@ -52,7 +52,7 @@ table td div {
     vertical-align: top;
 }
 
-#transaction_pane, #new_output_form, #compiler_pane, #send_pane, #explorer_pane {
+#transaction_pane, #new_output_form, #compiler_pane, #send_pane, #explorer_pane, #block_show_div {
     display: none;
 }
 
@@ -76,6 +76,11 @@ h3 {
 }
 
 #tx_preview_pane p {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+#block_show_div p {
     word-wrap: break-word;
     white-space: pre-wrap;
 }

@@ -253,15 +253,34 @@ $(document).on("click", "#send_button", function(event) {
     });
 });
 
-function getBlock(id) {
-    $.jsonRPC.request('getblock', {
-          params: {"id": id},
-          success: function(result) {
+var getBlockCallback = function(id) {
+    return function(result) {
+        if(result["result"] == null) {
+            $.jsonRPC.request('gettransaction', {
+                  params: {"id": id},
+                  success: function(result) {
+                    $("#block_show_div p").text(JSON.stringify(result["result"], null, 4));
+                    $("#explorer_search_string").val("");
+                    $("#block_show_div").show();
+                    $("#block_list_div").hide();
+                  },
+                  error: function(result) {
+                      throw new Error(result["error"]["message"]);    
+                  }
+            });
+        } else {
             $("#block_show_div p").text(JSON.stringify(result["result"], null, 4));
             $("#explorer_search_string").val("");
             $("#block_show_div").show();
             $("#block_list_div").hide();
-          },
+        }
+    };
+}; 
+
+function getBlock(id) {
+    $.jsonRPC.request('getblock', {
+          params: {"id": id},
+          success: getBlockCallback(id),
           error: function(result) {
               throw new Error(result["error"]["message"]);    
           }

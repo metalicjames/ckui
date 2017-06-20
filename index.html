@@ -18,7 +18,26 @@
                     <button type="button" id="nav_send">Send</button>
                     <button type="button" id="nav_transaction">Transaction Designer</button>
                     <button type="button" id="nav_compiler">Contract Compiler</button>
+                    <button type="button" id="nav_explorer">Block Explorer</button>
                 </p>            
+            </div>
+        </div>
+        <div id="explorer_pane">
+            <h3>Block Explorer</h3>
+            <form id="explorer_form">
+                <fieldset>
+                    <input type="text" id="explorer_search_string"><br>      
+                    <button type="button" id="explorer_search_button">Search</button>                
+                </fieldset>
+            </form>
+            <div id="block_list_div">
+                <table id="block_list_table">
+                    <thead>
+                        <tr><th>height</th><th>id</th><th>total sent</th></tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+               </table>
             </div>
         </div>
         <div id="send_pane">

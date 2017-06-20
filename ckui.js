@@ -130,6 +130,7 @@ $(document).on("click", "#nav_address", function() {
     $("#address_pane").show();
     $("#compiler_pane").hide();
     $("#send_pane").hide();
+    $("#explorer_pane").hide();
 });
 
 $(document).on("click", "#nav_transaction", function() {    
@@ -137,6 +138,7 @@ $(document).on("click", "#nav_transaction", function() {
     $("#address_pane").hide();
     $("#compiler_pane").hide();
     $("#send_pane").hide();
+    $("#explorer_pane").hide();
 });
 
 $(document).on("click", "#nav_compiler", function() {    
@@ -144,6 +146,7 @@ $(document).on("click", "#nav_compiler", function() {
     $("#address_pane").hide();
     $("#send_pane").hide();
     $("#compiler_pane").show();
+    $("#explorer_pane").hide();
 });
 
 $(document).on("click", "#nav_send", function() {    
@@ -151,6 +154,15 @@ $(document).on("click", "#nav_send", function() {
     $("#address_pane").hide();
     $("#compiler_pane").hide();
     $("#send_pane").show();
+    $("#explorer_pane").hide();
+});
+
+$(document).on("click", "#nav_explorer", function() {    
+    $("#transaction_pane").hide();
+    $("#address_pane").hide();
+    $("#compiler_pane").hide();
+    $("#send_pane").hide();
+    $("#explorer_pane").show();
 });
 
 $(document).on("click", "#compile_button", function(event) {
@@ -259,6 +271,37 @@ function refreshAccountsTable() {
     });
 }
 
+function loadBlockExplorer() {
+    var appendBlock = function(height) {
+        return function(result) {
+            var total = 0;
+            for(y = 0; y < result["result"]["coinbaseTx"]["outputs"].length; y++) {
+                total += result["result"]["coinbaseTx"]["outputs"][y]["value"];
+            }
+            
+            if(result["result"]["transactions"] != null) {
+                for(y = 0; y < result["result"]["transactions"].length; y++) {
+                    for(j = 0; j < result["result"]["transactions"][y]["outputs"].length; j++) {
+                        total += result["result"]["transactions"][y]["outputs"][j]["value"];   
+                    }
+                }
+            }
+            $("#block_list_table").children("tbody").append("<tr><td>" + height + "</td><td>" + result["result"]["id"] + "</td><td>" + (total / 100000000.0) + "</td></tr>");
+        };
+    };
+
+
+    for(i = window.chainInfo["height"]; i >= 1 && window.chainInfo["height"] - i <= 20; i--) {
+        $.jsonRPC.request('getblockbyheight', {
+          params: {"height": i},
+          success: appendBlock(i),
+          error: function(result) {
+              throw new Error(result["error"]["message"]);    
+          }
+        });
+    }
+}
+
 $(document).ready(function() {
 
 $.jsonRPC.setup({
@@ -274,6 +317,9 @@ $.jsonRPC.request('getinfo', {
                           + "<br>Height: " + result["result"]["height"] 
                           + "<br>Balance: " + result["result"]["balance"] 
                           + "<br>Connections: " + result["result"]["connections"] + "</p>");
+    window.chainInfo = result["result"];
+    
+    loadBlockExplorer();
   },
   error: function(result) {
       throw new Error(result["error"]["message"]);    

@@ -52,7 +52,7 @@ table td div {
     vertical-align: top;
 }
 
-#transaction_pane, #new_output_form, #compiler_pane, #send_pane {
+#transaction_pane, #new_output_form, #compiler_pane, #send_pane, #explorer_pane {
     display: none;
 }
 

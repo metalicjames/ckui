@@ -52,7 +52,7 @@ table td div {
     vertical-align: top;
 }
 
-#transaction_pane, #new_output_form, #compiler_pane, #send_pane, #explorer_pane, #block_show_div {
+#new_address_form, #tx_preview_pane, #transaction_pane, #new_output_form, #compiler_pane, #send_pane, #explorer_pane, #block_show_div {
     display: none;
 }
 
@@ -71,20 +71,8 @@ h3 {
     display: inline-block;
 }
 
-#tx_preview_pane {
-    display: none;
-}
-
-#tx_preview_pane p {
+#tx_preview_pane p, #block_show_div p {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
 
-#block_show_div p {
-    word-wrap: break-word;
-    white-space: pre-wrap;
-}
-
-#new_address_form {
-    display: none;
-}

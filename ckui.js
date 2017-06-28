@@ -67,7 +67,7 @@ function refresh() {
 function populateOutputTable(accounts) {
     for(var i = 0; i < accounts.length; i++) {
         var account = accounts[i];
-        $("#address_table").children("tbody").append("<tr><td>" + account["balance"] + "</td><td>" + account["name"] + "</td><td>" + account["address"] + "</td><tr>");        
+        $("#address_table").children("tbody").append("<tr><td>" + account["balance"] + "</td><td>" + account["name"] + "</td><td>" + account["keys"][0]["pubKey"] + "</td><tr>");        
         
         $.jsonRPC.request('listunspentoutputs', {
           params: {"account": accounts[i]["name"]},          

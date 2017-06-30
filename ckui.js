@@ -2,7 +2,11 @@ function getTransaction() {
     var inputs = $('#pending_outputs_table tbody').children("tr").map(function(i, v) {
         var $td = $('div', this);
         var returning = {
-             outputId: $td.eq(0).text()     
+             outputId: $td.eq(0).text()
+        }
+        
+        if($(this).find("p.spend_data").text() != "") {
+            returning["data"] = JSON.parse($(this).find("p.spend_data").text());
         }
         
         return returning;
@@ -85,10 +89,9 @@ function populateOutputTable(accounts) {
                                 publicKey = output["data"]["publicKey"];
                             }
                         }
-                        $("#outputs_list_table").children("tbody").append("<tr class=\"unspent_output\"><td><div>" + output["id"] + "</div></td><td><div>" 
+                        $("#outputs_list_table").children("tbody").append("<tr class=\"unspent_output\"><td><div class=\"output_id\">" + output["id"] + "</div></td><td><div>" 
                                                                    + publicKey + "</div></td><td><div>"
                                                                    + (output["value"] / 100000000.0) + "</div></td><td><div>"
-                                                                   + output["nonce"] + "</div></td><td><div>"
                                                                    + contract + "</div></td></tr>");
                     }
                 }
@@ -105,16 +108,41 @@ function populateOutputTable(accounts) {
 $(document).on("click", ".unspent_output", function() {    
     if($(this).parent().parent().attr("id") == "pending_outputs_table") {
         $("#outputs_list_table").children("tbody").append($(this));
+        $("#outputs_list_table").children("tbody").children("tr:last").children("td:last").remove();
         $("#total").text((parseFloat($("#total").text()) - parseFloat($(this).children("td").children("div").eq(2).text())).toFixed(8));
         if($("#pending_outputs_table").children("tbody").children().length == 0) {
             $("#total").text("0");
         }
     } else if($(this).parent().parent().attr("id") == "outputs_list_table") {
         $("#pending_outputs_table").children("tbody").append($(this));
+        $("#pending_outputs_table").children("tbody").children("tr:last").append('<td><div><button type=\"button\" class=\"edit_spend_data_button\">Edit Spend Data</button></div><p hidden class=\"spend_data\"></p></td>');
         $("#total").text((parseFloat($("#total").text()) + parseFloat($(this).children("td").children("div").eq(2).text())).toFixed(8));
     }
     
     refresh();
+});
+
+$(document).on("click", ".edit_spend_data_button", function(e) {
+    e.stopImmediatePropagation();
+    $("#new_spend_data_id").val($(this).parents(".unspent_output").children("td").children("div").eq(0).text());
+    $("#edit_spend_data_form").toggle();
+});
+
+$(document).on("click", "#new_spend_data_submit", function(e) {
+    e.preventDefault();  
+    // Find row with ID in table
+    $("#pending_outputs_table tbody tr").each(function() {
+        if($(this).find("div.output_id").text() == $("#new_spend_data_id").val()) {
+            // Set spend data field
+            $(this).find("p.spend_data").text($("#new_spend_data").val());
+        }
+    });
+    
+    $("#edit_spend_data_form").toggle();
+});
+
+$(document).on("click", "#new_spend_data_cancel", function() {
+    $("#edit_spend_data_form").hide();
 });
 
 $(document).on("click", "#new_output_button", function() {    
@@ -353,34 +381,32 @@ function loadBlockExplorer() {
 }
 
 $(document).ready(function() {
+    $.jsonRPC.setup({
+      endPoint: 'http://localhost:8383/',
+      namespace: ''
+    });
 
-$.jsonRPC.setup({
-  endPoint: 'http://localhost:8383/',
-  namespace: ''
-});
+    $.jsonRPC.request('getinfo', {
+      params: {},
+      success: function(result) {
+        $("#server_info").html("<p>CK Version: " + result["result"]["CK Version"] 
+			                  + "<br>RPC Version: " + result["result"]["RPC Version"] 
+                              + "<br>Height: " + result["result"]["height"] 
+                              + "<br>Balance: " + result["result"]["balance"] 
+                              + "<br>Connections: " + result["result"]["connections"] + "</p>");
+        window.chainInfo = result["result"];
+        
+        loadBlockExplorer();
+      },
+      error: function(result) {
+          throw new Error(result["error"]["message"]);    
+      }
+    });
 
-$.jsonRPC.request('getinfo', {
-  params: {},
-  success: function(result) {
-    $("#server_info").html("<p>CK Version: " + result["result"]["CK Version"] 
-			              + "<br>RPC Version: " + result["result"]["RPC Version"] 
-                          + "<br>Height: " + result["result"]["height"] 
-                          + "<br>Balance: " + result["result"]["balance"] 
-                          + "<br>Connections: " + result["result"]["connections"] + "</p>");
-    window.chainInfo = result["result"];
-    
-    loadBlockExplorer();
-  },
-  error: function(result) {
-      throw new Error(result["error"]["message"]);    
-  }
-});
+    refreshAccountsTable();
 
-refreshAccountsTable();
-
-$("#address_table").tablesorter(); 
-$("#pending_outputs_table").tablesorter();
-$("#outputs_list_table").tablesorter();
-$("#pending_inputs_table").tablesorter();
-
+    $("#address_table").tablesorter(); 
+    $("#pending_outputs_table").tablesorter();
+    $("#outputs_list_table").tablesorter();
+    $("#pending_inputs_table").tablesorter();
 });

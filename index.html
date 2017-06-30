@@ -61,7 +61,7 @@
                 <div id="outputs_list_div" class="table_container">
                     <table id="outputs_list_table">
                         <thead>
-                            <tr><th>id</th><th>address</th><th>value</th><th>nonce</th><th>contract</th></tr>
+                            <tr><th>id</th><th>address</th><th>value</th><th>contract</th></tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -74,9 +74,19 @@
                 <div id="transaction_design_div">
                     <div id="pending_outputs_div" class="table_container">
                         <h4>Inputs </h4><h5 id="total">0</h5>
+                        <form id="edit_spend_data_form">
+				            <fieldset>		
+					            <legend>Edit Spend Data</legend>
+					                <input type="hidden" id="new_spend_data_id">
+					                Data:<br>
+						            <textarea id="new_spend_data" rows="4" cols="20"></textarea><br>
+                                    <button type="button" id="new_spend_data_submit">Submit</button>
+                                    <button type="button" id="new_spend_data_cancel">Cancel</button>
+				            </fieldset>
+			            </form>
                         <table id="pending_outputs_table">
                             <thead>
-                                <tr><th>id</th><th>address</th><th>value</th><th>nonce</th><th>contract</th></tr>
+                                <tr><th>id</th><th>address</th><th>value</th><th>contract</th><th>ops</th></tr>
                             </thead>
                             <tbody>
                             </tbody>

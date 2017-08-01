@@ -381,6 +381,10 @@ function loadBlockExplorer() {
 }
 
 $(document).ready(function() {
+    $.ajaxSetup({
+      headers: { 'Authorization': "Basic Y2tycGM6cGFzc3dvcmQ=" }
+    });
+  
     $.jsonRPC.setup({
       endPoint: 'http://localhost:8383/',
       namespace: ''

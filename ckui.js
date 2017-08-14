@@ -382,7 +382,7 @@ function loadBlockExplorer() {
 
 $(document).ready(function() {
     $.jsonRPC.setup({
-      endPoint: endPoint: window.location.protocol+'//'+window.location.hostname+':8383',
+      endPoint: window.location.protocol+'//'+window.location.hostname+':8383',
       namespace: ''
     });
 
